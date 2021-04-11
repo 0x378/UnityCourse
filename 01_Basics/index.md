@@ -11,15 +11,12 @@ Reapplied the controls of mechanic #1 to the player's acceleration instead of ve
 
 ## Mechanic #3
 Added gravity, but reduced the controls to use only the A, W, and D keys, where W will allow the player to jump if currently touching the bottom of the screen.<br/>
-**[Click here to see it in WebGL!](https://0x378.github.io/UnityCourse/01_Basics/mechanic3/WebGL_mechanic3)**<br/>
-<img src="mechanic3/Recordings/gif_animation_003.gif" alt="gif_animation_003" width="440" height="208"><br/>
+[**Click here to see it in WebGL!**<br/><img src="mechanic3/Recordings/gif_animation_003.gif" alt="gif_animation_003" width="440" height="208">](https://0x378.github.io/UnityCourse/01_Basics/mechanic3/WebGL_mechanic3)<br/>
 
 ## Mechanic #4
 Revisiting the acceleration functionality from mechanic #2, I added air resistance in order to simulate terminal velocity, with a deceleration magnitude directly proportional to the square of the current velocity. I also changed the bounds of the screen such that, if the player goes off the edge, it will be teleported to the opposite side to continue its trajectory.<br/>
-**[Click here to see it in WebGL!](https://0x378.github.io/UnityCourse/01_Basics/mechanic4/WebGL_mechanic4)**<br/>
-<img src="mechanic4/Recordings/gif_animation_004.gif" alt="gif_animation_004" width="440" height="208"><br/>
+[**Click here to see it in WebGL!**<br/><img src="mechanic4/Recordings/gif_animation_004.gif" alt="gif_animation_004" width="440" height="208">](https://0x378.github.io/UnityCourse/01_Basics/mechanic4/WebGL_mechanic4)<br/>
 
 ## Mechanic #5
 Using WASD keys for player movement, as well as mouse clicks to relocate a yellow dot, the player is now tied to a point of origin using a “spring” effect. The force pulling the player towards the dot is directly proportional to the player’s distance away from it.<br/>
-**[Click here to see it in WebGL!](https://0x378.github.io/UnityCourse/01_Basics/mechanic5/WebGL_mechanic5)**<br/>
-<img src="mechanic5/Recordings/gif_animation_005.gif" alt="gif_animation_005" width="440" height="208"><br/>
+[**Click here to see it in WebGL!**<br/><img src="mechanic5/Recordings/gif_animation_005.gif" alt="gif_animation_005" width="440" height="208">](https://0x378.github.io/UnityCourse/01_Basics/mechanic5/WebGL_mechanic5)<br/>
