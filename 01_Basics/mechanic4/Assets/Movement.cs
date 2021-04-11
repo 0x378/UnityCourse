@@ -29,8 +29,8 @@ public class Movement : MonoBehaviour
 
         Vector3 pos = transform.position;
         Vector3 scene = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
-        scene.x += 0.5f;
-        scene.y += 0.5f;
+        scene.x += 0.64f;
+        scene.y += 0.64f;
 
         float delta_x = 0;
         float delta_y = 0;
