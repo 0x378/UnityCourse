@@ -1,37 +1,9 @@
-## Welcome to GitHub Pages
+# Week 1: Unity Basics
+[Click here for more details](https://0x378.github.io/UnityCourse/01_Basics)
 
-You can use the [editor on GitHub](https://github.com/0x378/UnityCourse/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/0x378/UnityCourse/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+## Or, go straight to the WebGL builds:
+[Mechanic #1](https://0x378.github.io/UnityCourse/01_Basics/mechanic1/WebGL_mechanic1)
+[Mechanic #2](https://0x378.github.io/UnityCourse/01_Basics/mechanic2/WebGL_mechanic2)
+[Mechanic #3](https://0x378.github.io/UnityCourse/01_Basics/mechanic3/WebGL_mechanic3)
+[Mechanic #4](https://0x378.github.io/UnityCourse/01_Basics/mechanic4/WebGL_mechanic4)
+[Mechanic #5](https://0x378.github.io/UnityCourse/01_Basics/mechanic5/WebGL_mechanic5)
