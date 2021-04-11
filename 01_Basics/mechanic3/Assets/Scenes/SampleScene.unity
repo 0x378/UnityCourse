@@ -155,7 +155,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43d248dd573944ae09985b10d3a61ebe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  acceleration: 11
+  decay_coefficient: 0.996
+  acceleration: 18
   gravity: -30
   velocity_x: 0
   velocity_y: 0
