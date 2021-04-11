@@ -18,5 +18,5 @@ Revisiting the acceleration functionality from mechanic #2, I added air resistan
 **[Click here to see it in WebGL!](https://0x378.github.io/UnityCourse/01_Basics/mechanic4/WebGL_mechanic4)**
 
 ## Mechanic #5
-Using WASD keys for player movement, as well as mouse clicks to relocate a yellow dot, the player is now tied to a point of origin using a “spring” effect. A force pulling the player towards the dot is directly proportional to the player’s distance away from the dot. <br/>
+Using WASD keys for player movement, as well as mouse clicks to relocate a yellow dot, the player is now tied to a point of origin using a “spring” effect. The force pulling the player towards the dot is directly proportional to the player’s distance away from it. <br/>
 **[Click here to see it in WebGL!](https://0x378.github.io/UnityCourse/01_Basics/mechanic5/WebGL_mechanic5)**
