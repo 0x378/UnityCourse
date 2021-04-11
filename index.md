@@ -1,37 +1,6 @@
-## Welcome to GitHub Pages
+# Introduction:
+You have reached Vitaliy, the Cat! :) This repository will hold a compilation of my Unity projects for CSS 385, a Game Development course at the University of Washington, Bothell.
 
-You can use the [editor on GitHub](https://github.com/0x378/UnityCourse/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/0x378/UnityCourse/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+# Unity Basics:
+For this project, I started with a tutorial from [Tech For Good](https://github.com/t4guw) on using the [WASD keys for 2D movement](https://github.com/t4guw/100-Unity-Mechanics-for-Programmers/tree/master/programs/wasd_movement_2d), and created five separate modifications to its mechanics. I played around with various physics such as acceleration, gravity, air resistance, exponential decay, and spring constants to see how well I could implement each in Unity. <br/>
+**[Click here to see it in action!](https://0x378.github.io/UnityCourse/01_Basics)**
