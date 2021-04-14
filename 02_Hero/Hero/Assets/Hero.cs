@@ -5,20 +5,28 @@ using UnityEngine;
 public class Hero : MonoBehaviour
 {
     // Initialized by user:
-    public float propellerRPM;
+    public float propellerRPM = 150f;
+    public float maximumAcceleration = 15f;
+    public float maximumVelocity = 80f;
     public Sprite[] sprites;
+    public GameObject projectile;
 
     // Initialized upon startup:
     private int health;
     private bool mouseMode;         // 0 = keyboard only, 1 = mouse
     private bool damageEnabled;     // 0 = no player damage, 1 = enabled
-    private float velocity;         // Initial value: 20 units/sec (for keyboard-only mode)
+    public float velocity;         // Initial value: 20 units/sec (for keyboard-only mode)
 
+    // Sprite image handling variables:
     private int imageState;         // Array index for sprite images
     private int numberOfImages;     // Number of sprite images in the array
     private float maximumImageTime; // Maximum elapsed time between sprite images
     private float currentImageTime; // The time at which the current sprite image appeared
     private SpriteRenderer currentSprite;
+
+    // Weapon handling variables:
+    public float WeaponCooldownDuration = 0.2f; // Cooldown duration for weapon
+    private float previousProjectileTime;
 
     // Reinitialized upon each update:
     private Vector3 position;
@@ -31,13 +39,14 @@ public class Hero : MonoBehaviour
         health = 100;
         mouseMode = true;
         damageEnabled = false;
+        velocity = 20f;
+
         imageState = 0;
         numberOfImages = sprites.Length;
         maximumImageTime = 60f / (3f * numberOfImages * propellerRPM);
         currentImageTime = Time.time;
+        previousProjectileTime = Time.time;
         currentSprite = gameObject.GetComponent<SpriteRenderer>();
-
-        velocity = 20f;
     }
 
     private void UpdateSpriteImage()
@@ -75,20 +84,27 @@ public class Hero : MonoBehaviour
         transform.Rotate(0, 0, deltaAngle);
     }
 
-    private void UpdatePlayerPosition()
+    private void UpdatePlayerVelocity()
     {
-        position = transform.position;
-
-        if (mouseMode)
+        // Go faster:
+        if (Input.GetKey(KeyCode.W))
         {
-            position.x = mouse.x;
-            position.y = mouse.y;
-        }
-        else // Keyboard Mode:
-        {
-
+            velocity += maximumAcceleration * Time.deltaTime * (1 - velocity / maximumVelocity);
         }
 
+        // Go slower:
+        if (Input.GetKey(KeyCode.S))
+        {
+            velocity -= maximumAcceleration * Time.deltaTime * (1 + velocity / maximumVelocity);
+        }
+    }
+
+    private void UpdatePositionMouseMode()
+    {
+        position.x = mouse.x;
+        position.y = mouse.y;
+
+        // Wall checks:
         if (position.x < -scene.x)
         {
             position.x = -scene.x;
@@ -106,23 +122,86 @@ public class Hero : MonoBehaviour
         {
             position.y = scene.y;
         }
+    }
+
+    public void UpdatePositionKeyboardMode()
+    {
+        float deltaV = velocity * Time.deltaTime;
+        float angleRadians = transform.localEulerAngles.z * Mathf.Deg2Rad;
+        position.x -= deltaV * Mathf.Sin(angleRadians);
+        position.y += deltaV * Mathf.Cos(angleRadians);
+
+        // Wall checks:
+        if (position.x < -scene.x) // Bounce off the left wall:
+        {
+            position.x = -scene.x;
+            transform.eulerAngles = new Vector3(0, 0, -transform.localEulerAngles.z);
+        }
+        else if (position.x > scene.x) // Bounce off the right wall:
+        {
+            position.x = scene.x;
+            transform.eulerAngles = new Vector3(0, 0, -transform.localEulerAngles.z);
+        }
+
+        if (position.y < -scene.y) // Bounce off the top wall:
+        {
+            position.y = -scene.y;
+            transform.eulerAngles = new Vector3(0, 0, 180 - transform.localEulerAngles.z);
+        }
+        else if (position.y > scene.y) // Bounce off the bottom wall:
+        {
+            position.y = scene.y;
+            transform.eulerAngles = new Vector3(0, 0, 180 - transform.localEulerAngles.z);
+        }
+    }
+
+    public void UpdatePlayerPosition()
+    {
+        position = transform.position;
+
+        if (mouseMode)
+        {
+            UpdatePositionMouseMode();
+        }
+        else
+        {
+            UpdatePositionKeyboardMode();
+        }
 
         transform.position = position;
     }
 
-    public int getHealth()
+    public void UpdateWeapon()
     {
-        return health;
+        if (Input.GetKey(KeyCode.Space))
+        {
+            float elapsedTime = Time.time - previousProjectileTime;
+
+            if (elapsedTime > WeaponCooldownDuration)
+            {
+                Instantiate(projectile, position, transform.rotation);
+                previousProjectileTime = Time.time;
+            }
+        }
+    }
+
+    // Returns a value between 0 and 1, where 1 represents full health:
+    public float getHealth()
+    {
+        return health / 100f;
     }
 
     public void damageBy(int amount)
     {
-        health -= amount;
-
-        if (health <= 0)
+        if (damageEnabled)
         {
-            health = 0;
-            Destroy(this);
+            health -= amount;
+
+            if (health <= 0)
+            {
+                health = 0;
+                Destroy(gameObject);
+            }
         }
     }
 
@@ -136,6 +215,19 @@ public class Hero : MonoBehaviour
         return damageEnabled;
     }
 
+    private void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.gameObject.name.Length > 4)
+        {
+            if (collider.gameObject.name.Substring(0, 5) == "Plane")
+            {
+                Plane enemy = collider.gameObject.GetComponent<Plane>();
+                enemy.damageBy(100);
+                this.damageBy(10);
+            }
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -145,10 +237,13 @@ public class Hero : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.M))
         {
             mouseMode = !mouseMode;
+            velocity = 20f;
         }
 
         UpdateSpriteImage();
         UpdatePlayerDirection();
+        UpdatePlayerVelocity();
         UpdatePlayerPosition();
+        UpdateWeapon();
     }
 }
