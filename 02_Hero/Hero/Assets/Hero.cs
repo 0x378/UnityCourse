@@ -9,7 +9,7 @@ public class Hero : MonoBehaviour
     public float maximumAcceleration = 15f;
     public float maximumVelocity = 80f;
     public Sprite[] sprites;
-    public GameObject projectile;
+    public Egg projectile;
 
     // Initialized upon startup:
     public HealthBar healthBar;
@@ -39,8 +39,8 @@ public class Hero : MonoBehaviour
         healthBar = Instantiate(healthBar, transform.position, Quaternion.identity) as HealthBar;
         healthBar.Setup(gameObject, 100);
         mouseMode = true;
-        damageEnabled = false;
-        velocity = 20f;
+        damageEnabled = true;
+        velocity = 0f;
 
         imageState = 0;
         numberOfImages = sprites.Length;
@@ -90,16 +90,23 @@ public class Hero : MonoBehaviour
     // towards zero as current velocity approaches the terminal value.
     private void UpdatePlayerVelocity()
     {
-        // Go faster if currently moving forward, or slower if backward:
-        if (Input.GetKey(KeyCode.W))
+        if (mouseMode)
         {
-            velocity += maximumAcceleration * Time.deltaTime * (1 - velocity / maximumVelocity);
+            velocity = 0;
         }
-
-        // Go slower if currently moving forward, or faster if backward:
-        if (Input.GetKey(KeyCode.S))
+        else
         {
-            velocity -= maximumAcceleration * Time.deltaTime * (1 + velocity / maximumVelocity);
+            // Go faster if currently moving forward, or slower if backward:
+            if (Input.GetKey(KeyCode.W))
+            {
+                velocity += maximumAcceleration * Time.deltaTime * (1 - velocity / maximumVelocity);
+            }
+
+            // Go slower if currently moving forward, or faster if backward:
+            if (Input.GetKey(KeyCode.S))
+            {
+                velocity -= maximumAcceleration * Time.deltaTime * (1 + velocity / maximumVelocity);
+            }
         }
     }
 
@@ -183,7 +190,13 @@ public class Hero : MonoBehaviour
 
             if (elapsedTime > WeaponCooldownDuration)
             {
-                Instantiate(projectile, position, transform.rotation);
+                Egg newEgg = Instantiate(projectile, position, transform.rotation) as Egg;
+
+                if (velocity > 0)
+                {
+                    newEgg.velocity += velocity;
+                }
+
                 previousProjectileTime = Time.time;
             }
         }
@@ -234,7 +247,15 @@ public class Hero : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.M))
         {
             mouseMode = !mouseMode;
-            velocity = 20f;
+
+            if (mouseMode)
+            {
+                velocity = 0f;
+            }
+            else
+            {
+                velocity = 20f;
+            }
         }
 
         UpdateSpriteImage();

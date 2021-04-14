@@ -249,7 +249,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 21c7b51e8b7b7174bacf4e6db3e53580, type: 3}
   - {fileID: 21300000, guid: ed88417009794b84eba0791b8ec7ffe8, type: 3}
   - {fileID: 21300000, guid: d4da24de66126cf42a074263ef5b287a, type: 3}
-  projectile: {fileID: 4457778957918968619, guid: a93d88916a1ff264f8b4922614b1bb3b, type: 3}
+  projectile: {fileID: 1375100700457602974, guid: a93d88916a1ff264f8b4922614b1bb3b, type: 3}
   healthBar: {fileID: 6054503566392334425, guid: a3a6f1281804a0b4ca1b091f1511d86c, type: 3}
   velocity: 20
   WeaponCooldownDuration: 0.2

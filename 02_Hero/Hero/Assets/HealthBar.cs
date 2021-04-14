@@ -20,7 +20,22 @@ public class HealthBar : MonoBehaviour
 
     private void UpdateBar()
     {
+        if (level > 30)
+        {
+            bar.GetComponent<Renderer>().material.color = Color.green;
+        }
+        else if (level > 15)
+        {
+            bar.GetComponent<Renderer>().material.color = Color.yellow;
+        }
+        else
+        {
+            bar.GetComponent<Renderer>().material.color = Color.red;
+        }
+
         bar.transform.localScale = new Vector3(0.3f * level, 1, 1);
+        bar.transform.position = new Vector3(0.15f * (level - maximum), 0, -1);
+        bar.transform.position += background.transform.position;
     }
 
     public void Heal()

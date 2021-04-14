@@ -4,14 +4,9 @@ using UnityEngine;
 
 public class Egg : MonoBehaviour
 {
-    private float velocity;
+    public float velocity = 40f;
     private Vector3 position;
     private Vector3 scene;
-
-    void Start()
-    {
-        velocity = 40f; // units per second
-    }
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
