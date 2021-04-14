@@ -8,6 +8,9 @@ public class Egg : MonoBehaviour
     private Vector3 position;
     private Vector3 scene;
 
+    // Initialized only once, by the StatusBar itself:
+    public static StatusBar systemStatus;
+
     private void OnTriggerEnter2D(Collider2D collider)
     {
         if (collider.gameObject.name.Length > 4)

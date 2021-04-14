@@ -6,6 +6,16 @@ public class StatusBar : MonoBehaviour
 {
     public GameObject plane1, plane2, plane3;
 
+    // HERO:
+    public bool mouseMode = true;
+    public bool damageEnabled = false;
+    public int enemyCollisions;
+
+    // PROJECTILES:
+    public int eggsOnScreen;
+
+    // ENEMY:
+    public bool planeMovementEnabled = false;
     public int numberOfPlanes;
     public int numberOfProjectiles;
 
@@ -27,8 +37,13 @@ public class StatusBar : MonoBehaviour
 
     void Start()
     {
-        Plane.systemStatus = this;
+        Hero.systemStatus = this;
+        enemyCollisions = 0;
 
+        Egg.systemStatus = this;
+        eggsOnScreen = 0;
+
+        Plane.systemStatus = this;
         numberOfPlanes = 0;
         numberOfProjectiles = 0;
     }
@@ -59,6 +74,11 @@ public class StatusBar : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            planeMovementEnabled = !planeMovementEnabled;
+        }
+
         PlaneSpawner();
     }
 }

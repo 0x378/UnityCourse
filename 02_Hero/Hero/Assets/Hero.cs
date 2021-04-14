@@ -13,8 +13,6 @@ public class Hero : MonoBehaviour
 
     // Initialized upon startup:
     public HealthBar healthBar;
-    private bool mouseMode;         // 0 = keyboard only, 1 = mouse
-    private bool damageEnabled;     // 0 = no player damage, 1 = enabled
     public float velocity;         // Initial value: 20 units/sec (for keyboard-only mode)
 
     // Sprite image handling variables:
@@ -33,14 +31,15 @@ public class Hero : MonoBehaviour
     private Vector3 scene;
     private Vector3 mouse;
 
+    // Initialized only once, by the StatusBar itself:
+    public static StatusBar systemStatus;
+
     // Start is called before the first frame update
     void Start()
     {
         healthBar = Instantiate(healthBar, transform.position, Quaternion.identity) as HealthBar;
         healthBar.Setup(gameObject, 100);
-        mouseMode = true;
-        damageEnabled = true;
-        velocity = 0f;
+        velocity = 20f;
 
         imageState = 0;
         numberOfImages = sprites.Length;
@@ -90,7 +89,7 @@ public class Hero : MonoBehaviour
     // towards zero as current velocity approaches the terminal value.
     private void UpdatePlayerVelocity()
     {
-        if (mouseMode)
+        if (systemStatus.mouseMode)
         {
             velocity = 0;
         }
@@ -170,7 +169,7 @@ public class Hero : MonoBehaviour
     {
         position = transform.position;
 
-        if (mouseMode)
+        if (systemStatus.mouseMode)
         {
             UpdatePositionMouseMode();
         }
@@ -204,7 +203,7 @@ public class Hero : MonoBehaviour
 
     public void damageBy(int amount)
     {
-        if (damageEnabled)
+        if (systemStatus.damageEnabled)
         {
             healthBar.Subtract(amount);
 
@@ -213,16 +212,6 @@ public class Hero : MonoBehaviour
                 Destroy(gameObject);
             }
         }
-    }
-
-    public bool mouseIsEnabled()
-    {
-        return mouseMode;
-    }
-
-    public bool damageIsEnabled()
-    {
-        return damageEnabled;
     }
 
     private void OnTriggerEnter2D(Collider2D collider)
@@ -246,9 +235,9 @@ public class Hero : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.M))
         {
-            mouseMode = !mouseMode;
+            systemStatus.mouseMode = !systemStatus.mouseMode;
 
-            if (mouseMode)
+            if (systemStatus.mouseMode)
             {
                 velocity = 0f;
             }
@@ -256,6 +245,12 @@ public class Hero : MonoBehaviour
             {
                 velocity = 20f;
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            systemStatus.damageEnabled = !systemStatus.damageEnabled;
+            healthBar.Heal();
         }
 
         UpdateSpriteImage();

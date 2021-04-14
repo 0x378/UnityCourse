@@ -352,7 +352,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 874460854}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -411,5 +411,10 @@ MonoBehaviour:
   plane1: {fileID: 5846956585259186038, guid: 92c75879e5d540d428a8fe627a0159d1, type: 3}
   plane2: {fileID: 4346449279455841025, guid: 6fe70356f1789a242bb71b1fb5e2c60d, type: 3}
   plane3: {fileID: 516917774214801607, guid: 85aa6460595a48f4e8c3aaad14d11ff7, type: 3}
+  mouseMode: 1
+  damageEnabled: 0
+  enemyCollisions: 0
+  eggsOnScreen: 0
+  planeMovementEnabled: 0
   numberOfPlanes: 0
   numberOfProjectiles: 0

@@ -97,7 +97,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02f37948732bd334896146cf05052f84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  angleDegrees: 0
+  distanceFromLeft: 0
+  distanceFromRight: 0
+  distanceFromTop: 0
+  distanceFromBottom: 0
+  velocity: 25
   type: 
+  angularVelocity: 0
+  scene: {x: 0, y: 0, z: 0}
   healthBar: {fileID: 6054503566392334425, guid: a3a6f1281804a0b4ca1b091f1511d86c, type: 3}
 --- !u!50 &3938302333976358786
 Rigidbody2D:
@@ -107,7 +115,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 516917774214801607}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
