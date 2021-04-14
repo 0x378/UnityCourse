@@ -12,7 +12,7 @@ public class Hero : MonoBehaviour
     public GameObject projectile;
 
     // Initialized upon startup:
-    private int health;
+    public HealthBar healthBar;
     private bool mouseMode;         // 0 = keyboard only, 1 = mouse
     private bool damageEnabled;     // 0 = no player damage, 1 = enabled
     public float velocity;         // Initial value: 20 units/sec (for keyboard-only mode)
@@ -36,7 +36,8 @@ public class Hero : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        health = 100;
+        healthBar = Instantiate(healthBar, transform.position, Quaternion.identity) as HealthBar;
+        healthBar.Setup(gameObject, 100);
         mouseMode = true;
         damageEnabled = false;
         velocity = 20f;
@@ -84,15 +85,18 @@ public class Hero : MonoBehaviour
         transform.Rotate(0, 0, deltaAngle);
     }
 
+    // Allows the player to accelerate forwards or backwards, but
+    // limiting the maximum velocity by reducing the acceleration
+    // towards zero as current velocity approaches the terminal value.
     private void UpdatePlayerVelocity()
     {
-        // Go faster:
+        // Go faster if currently moving forward, or slower if backward:
         if (Input.GetKey(KeyCode.W))
         {
             velocity += maximumAcceleration * Time.deltaTime * (1 - velocity / maximumVelocity);
         }
 
-        // Go slower:
+        // Go slower if currently moving forward, or faster if backward:
         if (Input.GetKey(KeyCode.S))
         {
             velocity -= maximumAcceleration * Time.deltaTime * (1 + velocity / maximumVelocity);
@@ -185,21 +189,14 @@ public class Hero : MonoBehaviour
         }
     }
 
-    // Returns a value between 0 and 1, where 1 represents full health:
-    public float getHealth()
-    {
-        return health / 100f;
-    }
-
     public void damageBy(int amount)
     {
         if (damageEnabled)
         {
-            health -= amount;
+            healthBar.Subtract(amount);
 
-            if (health <= 0)
+            if (!healthBar.isAlive())
             {
-                health = 0;
                 Destroy(gameObject);
             }
         }

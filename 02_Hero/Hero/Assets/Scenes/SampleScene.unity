@@ -250,6 +250,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: ed88417009794b84eba0791b8ec7ffe8, type: 3}
   - {fileID: 21300000, guid: d4da24de66126cf42a074263ef5b287a, type: 3}
   projectile: {fileID: 4457778957918968619, guid: a93d88916a1ff264f8b4922614b1bb3b, type: 3}
+  healthBar: {fileID: 6054503566392334425, guid: a3a6f1281804a0b4ca1b091f1511d86c, type: 3}
   velocity: 20
   WeaponCooldownDuration: 0.2
 --- !u!212 &874460856
@@ -410,3 +411,5 @@ MonoBehaviour:
   plane1: {fileID: 5846956585259186038, guid: 92c75879e5d540d428a8fe627a0159d1, type: 3}
   plane2: {fileID: 4346449279455841025, guid: 6fe70356f1789a242bb71b1fb5e2c60d, type: 3}
   plane3: {fileID: 516917774214801607, guid: 85aa6460595a48f4e8c3aaad14d11ff7, type: 3}
+  numberOfPlanes: 0
+  numberOfProjectiles: 0

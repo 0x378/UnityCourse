@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class Plane : MonoBehaviour
 {
-    public int health;
-    public int maxHealth;
     public string type;
+
+    // Initialized for each plane, within Start():
+    public HealthBar healthBar;
 
     // Initialized only once, by the StatusBar itself:
     public static StatusBar systemStatus;
 
     void Start()
     {
+        healthBar = Instantiate(healthBar, transform.position, Quaternion.identity) as HealthBar;
+
         // Acquire the plane type from the object name:
         if (gameObject.name.Length > 5)
         {
@@ -26,36 +29,27 @@ public class Plane : MonoBehaviour
         // Determine hit points based on plane type:
         if (type == "Plane1")
         {
-            maxHealth = 40;
+            healthBar.Setup(gameObject, 40);
         }
         else if (type == "Plane2")
         {
-            maxHealth = 60;
+            healthBar.Setup(gameObject, 60);
         }
         else // "Plane3" or other:
         {
-            maxHealth = 100;
+            healthBar.Setup(gameObject, 100);
         }
-
-        health = maxHealth;
-    }
-
-    // Returns a value between 0 and 1, where 1 represents full health:
-    public float getHealth()
-    {
-        return health / maxHealth;
     }
 
     public void damageBy(int amount)
     {
-        if (health > 0)
+        if (healthBar.isAlive())
         {
-            health -= amount;
+            healthBar.Subtract(amount);
 
             // If health is depleted:
-            if (health <= 0)
+            if (!healthBar.isAlive())
             {
-                health = 0;
                 systemStatus.numberOfPlanes--;
                 Destroy(gameObject);
             }
