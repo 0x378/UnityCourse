@@ -190,6 +190,7 @@ public class Hero : MonoBehaviour
             if (elapsedTime > WeaponCooldownDuration)
             {
                 Egg newEgg = Instantiate(projectile, position, transform.rotation) as Egg;
+                systemStatus.numberOfProjectiles++;
 
                 if (velocity > 0)
                 {
@@ -222,6 +223,7 @@ public class Hero : MonoBehaviour
             {
                 Plane enemy = collider.gameObject.GetComponent<Plane>();
                 enemy.damageBy(100);
+                systemStatus.enemyCollisions++;
                 this.damageBy(10);
             }
         }

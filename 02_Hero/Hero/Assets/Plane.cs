@@ -10,7 +10,7 @@ public class Plane : MonoBehaviour
     public float distanceFromTop;
     public float distanceFromBottom;
 
-    public float velocity = 25f;
+    public float velocity = 21f;
     public string type;
 
     public float angularVelocity = 0;
@@ -63,10 +63,17 @@ public class Plane : MonoBehaviour
         {
             healthBar.Subtract(amount);
 
+            // Reduce the alpha channel of the plane color:
+            Renderer renderer = gameObject.GetComponent<Renderer>();
+            Color currentColor = renderer.material.color;
+            currentColor.a *= Mathf.Pow(0.8f, amount * 4f / healthBar.maximum);
+            renderer.material.SetColor("_Color", currentColor);
+
             // If health is depleted:
             if (!healthBar.isAlive())
             {
                 systemStatus.numberOfPlanes--;
+                systemStatus.planesDestroyed++;
                 Destroy(gameObject);
             }
         }
@@ -80,7 +87,7 @@ public class Plane : MonoBehaviour
     void UpdateDirection()
     {
         // Makes it more likely to slow down the current angular velocity:
-        float rangeOffset = - 1.5f * angularVelocity;
+        float rangeOffset = -1.5f * angularVelocity;
 
 
         angleDegrees = transform.localEulerAngles.z;

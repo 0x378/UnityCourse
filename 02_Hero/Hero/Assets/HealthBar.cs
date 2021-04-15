@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class HealthBar : MonoBehaviour
 {
-    private int level;
-    private int maximum;
+    public int level;
+    public int maximum;
 
     public GameObject parentObject; // The object which this health bar belongs to
     public GameObject bar;          // Represents the current health

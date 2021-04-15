@@ -11,15 +11,28 @@ public class Egg : MonoBehaviour
     // Initialized only once, by the StatusBar itself:
     public static StatusBar systemStatus;
 
+    private bool isEnabled = true;
+
+    // Prevents duplicate counts upon deletion:
+    private void disableAndRemove()
+    {
+        if (isEnabled)
+        {
+            isEnabled = false;
+            systemStatus.numberOfProjectiles--;
+            Destroy(gameObject);
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.gameObject.name.Length > 4)
+        if (isEnabled && collider.gameObject.name.Length > 4)
         {
             if (collider.gameObject.name.Substring(0, 5) == "Plane")
             {
                 Plane enemy = collider.gameObject.GetComponent<Plane>();
                 enemy.damageBy(10);
-                Destroy(gameObject);
+                disableAndRemove();
             }
         }
     }
@@ -36,7 +49,7 @@ public class Egg : MonoBehaviour
 
         if (position.y < -scene.y || scene.y < position.y || position.x < -scene.x || scene.x < position.x)
         {
-            Destroy(gameObject);
+            disableAndRemove();
         }
 
         transform.position = position;

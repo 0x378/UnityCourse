@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StatusBar : MonoBehaviour
 {
+    public Text status;
     public GameObject plane1, plane2, plane3;
 
     // HERO:
@@ -12,12 +14,12 @@ public class StatusBar : MonoBehaviour
     public int enemyCollisions;
 
     // PROJECTILES:
-    public int eggsOnScreen;
+    public int numberOfProjectiles;
 
     // ENEMY:
     public bool planeMovementEnabled = false;
     public int numberOfPlanes;
-    public int numberOfProjectiles;
+    public int planesDestroyed;
 
     public static Vector3 getRandomPosition()
     {
@@ -41,11 +43,11 @@ public class StatusBar : MonoBehaviour
         enemyCollisions = 0;
 
         Egg.systemStatus = this;
-        eggsOnScreen = 0;
+        numberOfProjectiles = 0;
 
         Plane.systemStatus = this;
         numberOfPlanes = 0;
-        numberOfProjectiles = 0;
+        planesDestroyed = 0;
     }
 
     private void PlaneSpawner()
@@ -72,6 +74,36 @@ public class StatusBar : MonoBehaviour
         }
     }
 
+    void UpdateText()
+    {
+        status.text = "HERO:  Control[";
+
+        if (mouseMode)
+        {
+            status.text += "mouse";
+        }
+        else
+        {
+            status.text += "keyboard";
+        }
+
+        status.text += "],  Damage[";
+
+        if (damageEnabled)
+        {
+            status.text += "enabled";
+        }
+        else
+        {
+            status.text += "disabled";
+        }
+
+        status.text += "],  PlaneCollisions[" + enemyCollisions;
+        status.text += "]\nENEMY:  Count[" + numberOfPlanes;
+        status.text += "],  Destroyed[" + planesDestroyed;
+        status.text += "],  PROJECTILES:  OnScreen[" + numberOfProjectiles + "]";
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.P))
@@ -80,5 +112,6 @@ public class StatusBar : MonoBehaviour
         }
 
         PlaneSpawner();
+        UpdateText();
     }
 }
