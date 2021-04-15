@@ -119,12 +119,11 @@ public class StatusBar : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             // Reset the scene:
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("Gameplay");
         }
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            SceneManager.LoadScene("QuitScreen");
             Application.Quit();
         }
 

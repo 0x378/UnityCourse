@@ -412,7 +412,7 @@ MonoBehaviour:
   healthSrc: {fileID: 6054503566392334425, guid: a3a6f1281804a0b4ca1b091f1511d86c, type: 3}
   velocity: 20
   ProjectileCooldownDuration: 0.2
-  MissileCooldownDuration: 1.8
+  MissileCooldownDuration: 2.75
 --- !u!212 &874460856
 SpriteRenderer:
   m_ObjectHideFlags: 0
