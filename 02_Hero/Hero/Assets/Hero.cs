@@ -10,9 +10,11 @@ public class Hero : MonoBehaviour
     public float maximumVelocity = 80f;
     public Sprite[] sprites;
     public Egg projectile;
+    public Missile missile;
 
     // Initialized upon startup:
-    public HealthBar healthBar;
+    public HealthBar healthSrc;
+    private HealthBar healthBar;
     public float velocity;         // Initial value: 20 units/sec (for keyboard-only mode)
 
     // Sprite image handling variables:
@@ -23,8 +25,10 @@ public class Hero : MonoBehaviour
     private SpriteRenderer currentSprite;
 
     // Weapon handling variables:
-    public float WeaponCooldownDuration = 0.2f; // Cooldown duration for weapon
+    public float ProjectileCooldownDuration = 0.2f; // Cooldown duration for eggs
+    public float MissileCooldownDuration = 1.8f; // Cooldown duration for missiles
     private float previousProjectileTime;
+    private float previousMissileTime;
 
     // Reinitialized upon each update:
     private Vector3 position;
@@ -37,8 +41,6 @@ public class Hero : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        healthBar = Instantiate(healthBar, transform.position, Quaternion.identity) as HealthBar;
-        healthBar.Setup(gameObject, 100);
         velocity = 20f;
 
         imageState = 0;
@@ -46,6 +48,7 @@ public class Hero : MonoBehaviour
         maximumImageTime = 60f / (3f * numberOfImages * propellerRPM);
         currentImageTime = Time.time;
         previousProjectileTime = Time.time;
+        previousMissileTime = Time.time;
         currentSprite = gameObject.GetComponent<SpriteRenderer>();
     }
 
@@ -187,7 +190,7 @@ public class Hero : MonoBehaviour
         {
             float elapsedTime = Time.time - previousProjectileTime;
 
-            if (elapsedTime > WeaponCooldownDuration)
+            if (elapsedTime > ProjectileCooldownDuration)
             {
                 Egg newEgg = Instantiate(projectile, position, transform.rotation) as Egg;
                 systemStatus.numberOfProjectiles++;
@@ -200,6 +203,24 @@ public class Hero : MonoBehaviour
                 previousProjectileTime = Time.time;
             }
         }
+
+        if (Input.GetKey(KeyCode.F))
+        {
+            float elapsedTime = Time.time - previousMissileTime;
+
+            if (elapsedTime > MissileCooldownDuration)
+            {
+                Missile newMissile = Instantiate(missile, position, transform.rotation) as Missile;
+                systemStatus.numberOfProjectiles++;
+
+                if (velocity > 0)
+                {
+                    newMissile.velocity += velocity;
+                }
+
+                previousMissileTime = Time.time;
+            }
+        }
     }
 
     public void damageBy(int amount)
@@ -210,6 +231,7 @@ public class Hero : MonoBehaviour
 
             if (!healthBar.isAlive())
             {
+                systemStatus.message.text = "You died! :'(\nPress R to reset.";
                 Destroy(gameObject);
             }
         }
@@ -252,7 +274,18 @@ public class Hero : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.O))
         {
             systemStatus.damageEnabled = !systemStatus.damageEnabled;
-            healthBar.Heal();
+
+            if (systemStatus.damageEnabled)
+            {
+                // Create new health bar:
+                healthBar = Instantiate(healthSrc, transform.position, Quaternion.identity) as HealthBar;
+                healthBar.Setup(gameObject, 100);
+            }
+            else
+            {
+                // Triggers the health bar to delete itself:
+                healthBar.parentObject = null;
+            }
         }
 
         UpdateSpriteImage();

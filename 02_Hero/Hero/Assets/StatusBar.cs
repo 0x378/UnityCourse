@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class StatusBar : MonoBehaviour
 {
     public Text status;
+    public Text message;
     public GameObject plane1, plane2, plane3;
 
     // HERO:
@@ -39,10 +41,13 @@ public class StatusBar : MonoBehaviour
 
     void Start()
     {
+        message.text = ""; // Clear messages
+
         Hero.systemStatus = this;
         enemyCollisions = 0;
 
         Egg.systemStatus = this;
+        Missile.systemStatus = this;
         numberOfProjectiles = 0;
 
         Plane.systemStatus = this;
@@ -109,6 +114,18 @@ public class StatusBar : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.P))
         {
             planeMovementEnabled = !planeMovementEnabled;
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            // Reset the scene:
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            SceneManager.LoadScene("QuitScreen");
+            Application.Quit();
         }
 
         PlaneSpawner();
