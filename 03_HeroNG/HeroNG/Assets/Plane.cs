@@ -19,16 +19,14 @@ public class Plane : MonoBehaviour
     private Vector3 position;
     public Vector3 scene;
 
-    // Initialized for each plane, within Start():
-    public HealthBar healthBar;
+    private int currentHealth = 40;
+    private int maxHealth = 40;
 
     // Initialized only once, by the StatusBar itself:
     public static StatusBar systemStatus;
 
     void Start()
     {
-        healthBar = Instantiate(healthBar, transform.position, Quaternion.identity) as HealthBar;
-
         // Acquire the plane type from the object name:
         if (gameObject.name.Length > 5)
         {
@@ -42,36 +40,38 @@ public class Plane : MonoBehaviour
         // Determine hit points based on plane type:
         if (type == "Plane1")
         {
-            healthBar.Setup(gameObject, 40);
+            maxHealth = 40;
         }
         else if (type == "Plane2")
         {
-            healthBar.Setup(gameObject, 60);
+            maxHealth = 60;
         }
         else // "Plane3" or other:
         {
-            healthBar.Setup(gameObject, 100);
+            maxHealth = 100;
         }
 
+        currentHealth = maxHealth;
         angularVelocity = 0;
         angularAcceleration = 0;
     }
 
     public void damageBy(int amount)
     {
-        if (healthBar.isAlive())
+        if (currentHealth > 0)
         {
-            healthBar.Subtract(amount);
+            currentHealth -= amount;
 
             // Reduce the alpha channel of the plane color:
             Renderer renderer = gameObject.GetComponent<Renderer>();
             Color currentColor = renderer.material.color;
-            currentColor.a *= Mathf.Pow(0.8f, amount * 4f / healthBar.maximum);
+            currentColor.a *= Mathf.Pow(0.8f, amount * 4f / maxHealth);
             renderer.material.SetColor("_Color", currentColor);
 
             // If health is depleted:
-            if (!healthBar.isAlive())
+            if (currentHealth <= 0)
             {
+                currentHealth = 0;
                 systemStatus.numberOfPlanes--;
                 systemStatus.planesDestroyed++;
                 Destroy(gameObject);

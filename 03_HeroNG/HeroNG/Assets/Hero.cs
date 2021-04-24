@@ -13,8 +13,7 @@ public class Hero : MonoBehaviour
     public Missile missile;
 
     // Initialized upon startup:
-    public HealthBar healthSrc;
-    private HealthBar healthBar;
+    private int currentHealth = 100;
     public float velocity;         // Initial value: 20 units/sec (for keyboard-only mode)
 
     // Sprite image handling variables:
@@ -50,6 +49,7 @@ public class Hero : MonoBehaviour
         previousProjectileTime = Time.time;
         previousMissileTime = Time.time;
         currentSprite = gameObject.GetComponent<SpriteRenderer>();
+        currentHealth = 100;
     }
 
     private void UpdateSpriteImage()
@@ -227,10 +227,11 @@ public class Hero : MonoBehaviour
     {
         if (systemStatus.damageEnabled)
         {
-            healthBar.Subtract(amount);
+            currentHealth -= amount;
 
-            if (!healthBar.isAlive())
+            if (currentHealth <= 0)
             {
+                currentHealth = 0;
                 systemStatus.message.text = "You died! :'(\nPress R to reset.";
                 Destroy(gameObject);
             }
@@ -274,18 +275,7 @@ public class Hero : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.O))
         {
             systemStatus.damageEnabled = !systemStatus.damageEnabled;
-
-            if (systemStatus.damageEnabled)
-            {
-                // Create new health bar:
-                healthBar = Instantiate(healthSrc, transform.position, Quaternion.identity) as HealthBar;
-                healthBar.Setup(gameObject, 100);
-            }
-            else
-            {
-                // Triggers the health bar to delete itself:
-                healthBar.parentObject = null;
-            }
+            currentHealth = 100;
         }
 
         UpdateSpriteImage();
