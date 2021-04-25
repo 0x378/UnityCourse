@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Missile : MonoBehaviour
 {
-    public float acceleration = 10f;
-    public float velocity = 60f;
+    public float acceleration = 150f;
+    public float velocity = 20f;
     private Vector3 position;
     private Vector3 scene;
 
@@ -29,10 +29,19 @@ public class Missile : MonoBehaviour
     {
         if (isEnabled && collider.gameObject.name.Length > 4)
         {
-            if (collider.gameObject.name.Substring(0, 5) == "Plane")
+            string type = collider.gameObject.name.Substring(0, 5);
+
+            if (type == "Plane")
             {
                 Plane enemy = collider.gameObject.GetComponent<Plane>();
                 enemy.damageBy(80);
+                disableAndRemove();
+            }
+
+            if (systemStatus.showWaypoints && type == "Waypo")
+            {
+                Waypoint waypoint = collider.gameObject.GetComponent<Waypoint>();
+                waypoint.damageBy(80);
                 disableAndRemove();
             }
         }

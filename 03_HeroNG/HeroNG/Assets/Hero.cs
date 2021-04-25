@@ -25,7 +25,7 @@ public class Hero : MonoBehaviour
 
     // Weapon handling variables:
     public float ProjectileCooldownDuration = 0.2f; // Cooldown duration for eggs
-    public float MissileCooldownDuration = 2.75f; // Cooldown duration for missiles
+    public float MissileCooldownDuration = 2.2f; // Cooldown duration for missiles
     private float previousProjectileTime;
     private float previousMissileTime;
 

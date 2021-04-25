@@ -19,19 +19,24 @@ public class StatusBar : MonoBehaviour
     public int numberOfProjectiles;
 
     // ENEMY:
-    public bool planeMovementEnabled = false;
     public int numberOfPlanes;
     public int planesDestroyed;
 
+    // WAYPOINT:
+    public Vector3[] waypointPositions;
+    public bool waypointMovementEnabled = false;
+    public bool sequentialWaypoints = true;
+    public bool showWaypoints = true;
+
     public static Vector3 getRandomPosition()
     {
-        Vector3 scene = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
+        Vector3 scene = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0f));
 
         // Keep plane spawns away from edges:
-        scene.x *= 0.9f;
-        scene.y *= 0.9f;
+        scene.x *= 0.875f;
+        scene.y *= 0.875f;
 
-        return new Vector3(Random.Range(-scene.x, scene.x), Random.Range(-scene.y, scene.y), 0);
+        return new Vector3(Random.Range(-scene.x, scene.x), Random.Range(-scene.y, scene.y), 0f);
     }
 
     public static Quaternion getRandomDirection()
@@ -53,6 +58,8 @@ public class StatusBar : MonoBehaviour
         Plane.systemStatus = this;
         numberOfPlanes = 0;
         planesDestroyed = 0;
+
+        Waypoint.systemStatus = this;
     }
 
     private void PlaneSpawner()
@@ -111,9 +118,19 @@ public class StatusBar : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            showWaypoints = !showWaypoints;
+        }
+
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            sequentialWaypoints = !sequentialWaypoints;
+        }
+
         if (Input.GetKeyDown(KeyCode.P))
         {
-            planeMovementEnabled = !planeMovementEnabled;
+            waypointMovementEnabled = !waypointMovementEnabled;
         }
 
         if (Input.GetKeyDown(KeyCode.R))

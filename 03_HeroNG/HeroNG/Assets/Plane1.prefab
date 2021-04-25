@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 5846956585259186038}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 1}
+  m_LocalScale: {x: 7, y: 7, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -106,7 +106,6 @@ MonoBehaviour:
   type: 
   angularVelocity: 0
   scene: {x: 0, y: 0, z: 0}
-  healthBar: {fileID: 6054503566392334425, guid: a3a6f1281804a0b4ca1b091f1511d86c, type: 3}
 --- !u!50 &8220973671639092074
 Rigidbody2D:
   serializedVersion: 4

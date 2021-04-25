@@ -28,10 +28,19 @@ public class Egg : MonoBehaviour
     {
         if (isEnabled && collider.gameObject.name.Length > 4)
         {
-            if (collider.gameObject.name.Substring(0, 5) == "Plane")
+            string type = collider.gameObject.name.Substring(0, 5);
+
+            if (type == "Plane")
             {
                 Plane enemy = collider.gameObject.GetComponent<Plane>();
                 enemy.damageBy(10);
+                disableAndRemove();
+            }
+
+            if (systemStatus.showWaypoints && type == "Waypo")
+            {
+                Waypoint waypoint = collider.gameObject.GetComponent<Waypoint>();
+                waypoint.damageBy(10);
                 disableAndRemove();
             }
         }

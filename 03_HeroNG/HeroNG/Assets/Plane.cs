@@ -4,26 +4,29 @@ using UnityEngine;
 
 public class Plane : MonoBehaviour
 {
-    public float angleDegrees;
-    public float distanceFromLeft;
-    public float distanceFromRight;
-    public float distanceFromTop;
-    public float distanceFromBottom;
+    public Vector3 waypointHeading;
+    public float targetAngle; // DELETEEEEE
+    public float waypointAngleDifference;
 
     public float velocity = 21f;
     public string type;
 
+    private float angleDegrees;
     public float angularVelocity = 0;
     private float angularAcceleration = 0;
+    private float maximumAngularAcceleration = 300f;
 
     private Vector3 position;
     public Vector3 scene;
 
-    private int currentHealth = 40;
-    private int maxHealth = 40;
+    private int currentHealth;
+    private int maxHealth;
 
     // Initialized only once, by the StatusBar itself:
     public static StatusBar systemStatus;
+
+    // Current waypoint:
+    public int waypointIndex = 0;
 
     void Start()
     {
@@ -79,91 +82,89 @@ public class Plane : MonoBehaviour
         }
     }
 
-    // Chooses a random direction for the airplane's heading, but carefully in
-    // order to steer away from walls. An exponential function is used for each
-    // case, such that the angular acceleration away from the nearest wall is
-    // stronger when near the wall, and decays with distance as there is no need
-    // to turn around when far away.
+    void getNextWaypoint()
+    {
+        if (systemStatus.sequentialWaypoints) // Sequentially:
+        {
+            waypointIndex++;
+        }
+        else // At random:
+        {
+            waypointIndex += Random.Range(1, 6);
+        }
+
+        waypointIndex %= 6;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.gameObject.name.Length > 3)
+        {
+            if (collider.gameObject.name.Substring(0, 4) == "Wayp")
+            {
+                Waypoint collisionWaypoint = collider.gameObject.GetComponent<Waypoint>();
+
+                if (waypointIndex == collisionWaypoint.myIndex)
+                {
+                    getNextWaypoint();
+                }
+            }
+        }
+    }
+
+    // Limit the input angle to plus or minus 180 degrees:
+    float angleWithin180(float inputAngle)
+    {
+        while(inputAngle > 180)
+        {
+            inputAngle -= 360;
+        }
+
+        while (inputAngle < -180)
+        {
+            inputAngle += 360;
+        }
+
+        return inputAngle;
+    }
+
+    // Rotate the plane's heading to face the current waypoint:
     void UpdateDirection()
     {
-        // Makes it more likely to slow down the current angular velocity:
-        float rangeOffset = -1.5f * angularVelocity;
-
-
         angleDegrees = transform.localEulerAngles.z;
+        waypointHeading = systemStatus.waypointPositions[waypointIndex] - position;
+        targetAngle = Mathf.Atan2(-waypointHeading.x, waypointHeading.y) * Mathf.Rad2Deg;
+        waypointAngleDifference = angleWithin180(targetAngle - angleDegrees);
 
-        distanceFromLeft = position.x + scene.x;  // position.x - (-scene.x)
-        distanceFromRight = scene.x - position.x;
-        distanceFromTop = scene.y - position.y;
-        distanceFromBottom = position.y + scene.y;  // position.y - (-scene.y)
+        float maximumAngularVelocity = Mathf.Sqrt(Mathf.Abs(maximumAngularAcceleration * waypointAngleDifference));
 
-        // Turn around near walls:
-        if (angleDegrees < 180) // Heading left
+        if (waypointAngleDifference > 0)
         {
-            if (angleDegrees < 90) // Heading up-left
+            if (angularVelocity < maximumAngularVelocity)
             {
-                if (distanceFromLeft < distanceFromTop)
-                { // Turn around clockwise
-                    rangeOffset -= 512 * Mathf.Exp(-6f * distanceFromLeft / scene.x);
-                }
-                else
-                { // Turn around counter-clockwise
-                    rangeOffset += 512 * Mathf.Exp(-6f * distanceFromTop / scene.y);
-                }
+                angularAcceleration = maximumAngularAcceleration;
             }
-            else // Heading down-left
+            else
             {
-                if (distanceFromLeft < distanceFromBottom)
-                { // Turn around counter-clockwise
-                    rangeOffset += 512 * Mathf.Exp(-6f * distanceFromLeft / scene.x);
-                }
-                else
-                { // Turn around clockwise
-                    rangeOffset -= 512 * Mathf.Exp(-6f * distanceFromBottom / scene.y);
-                }
+                angularAcceleration = -maximumAngularAcceleration;
             }
         }
-        else // Heading right
+        else
         {
-            if (angleDegrees > 270) // Heading up-right
+            if (angularVelocity > -maximumAngularVelocity)
             {
-                if (distanceFromRight < distanceFromTop)
-                { // Turn around counter-clockwise
-                    rangeOffset += 512 * Mathf.Exp(-6f * distanceFromRight / scene.x);
-                }
-                else
-                { // Turn around clockwise
-                    rangeOffset -= 512 * Mathf.Exp(-6f * distanceFromTop / scene.y);
-                }
+                angularAcceleration = -maximumAngularAcceleration;
             }
-            else // Heading down-right
+            else
             {
-                if (distanceFromRight < distanceFromBottom)
-                { // Turn around clockwise
-                    rangeOffset -= 512 * Mathf.Exp(-6f * distanceFromRight / scene.x);
-                }
-                else
-                { // Turn around counter-clockwise
-                    rangeOffset += 512 * Mathf.Exp(-6f * distanceFromBottom / scene.y);
-                }
+                angularAcceleration = maximumAngularAcceleration;
             }
         }
 
-        angularAcceleration = Random.Range(rangeOffset - 512, rangeOffset + 512);
-
-        // Limit the angular velocity to 90 degrees per second when applying its acceleration:
         angularVelocity += angularAcceleration * Time.deltaTime;
-
-        if (angularVelocity > 90)
-        {
-            angularVelocity = 90;
-        }
-        else if (angularVelocity < -90)
-        {
-            angularVelocity = -90;
-        }
-
         transform.Rotate(0, 0, angularVelocity * Time.deltaTime);
+
+        //transform.Rotate(0f, 0f, waypointAngleDifference / 360f);
     }
 
     void UpdatePosition()
@@ -184,13 +185,10 @@ public class Plane : MonoBehaviour
     void Update()
     {
         scene = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
-        scene.x *= 0.9f;
-        scene.y *= 0.9f;
+        scene.x *= 0.875f;
+        scene.y *= 0.875f;
 
-        if (systemStatus.planeMovementEnabled)
-        {
-            UpdateDirection();
-            UpdatePosition();
-        }
+        UpdateDirection();
+        UpdatePosition();
     }
 }
