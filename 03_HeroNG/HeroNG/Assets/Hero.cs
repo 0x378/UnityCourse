@@ -46,8 +46,8 @@ public class Hero : MonoBehaviour
         numberOfImages = sprites.Length;
         maximumImageTime = 60f / (3f * numberOfImages * propellerRPM);
         currentImageTime = Time.time;
-        previousProjectileTime = Time.time;
-        previousMissileTime = Time.time;
+        previousProjectileTime = Time.time - ProjectileCooldownDuration;
+        previousMissileTime = Time.time - MissileCooldownDuration;
         currentSprite = gameObject.GetComponent<SpriteRenderer>();
         currentHealth = 100;
     }
@@ -186,11 +186,12 @@ public class Hero : MonoBehaviour
 
     public void UpdateWeapon()
     {
+        float elapsedProjectileTime = Time.time - previousProjectileTime;
+        float elapsedMissileTime = Time.time - previousMissileTime;
+
         if (Input.GetKey(KeyCode.Space))
         {
-            float elapsedTime = Time.time - previousProjectileTime;
-
-            if (elapsedTime > ProjectileCooldownDuration)
+            if (elapsedProjectileTime > ProjectileCooldownDuration)
             {
                 Egg newEgg = Instantiate(projectile, position, transform.rotation) as Egg;
                 systemStatus.numberOfProjectiles++;
@@ -206,9 +207,7 @@ public class Hero : MonoBehaviour
 
         if (Input.GetKey(KeyCode.F))
         {
-            float elapsedTime = Time.time - previousMissileTime;
-
-            if (elapsedTime > MissileCooldownDuration)
+            if (elapsedMissileTime > MissileCooldownDuration)
             {
                 Missile newMissile = Instantiate(missile, position, transform.rotation) as Missile;
                 systemStatus.numberOfProjectiles++;
@@ -221,6 +220,9 @@ public class Hero : MonoBehaviour
                 previousMissileTime = Time.time;
             }
         }
+
+        systemStatus.UpdateEggCooldown(elapsedProjectileTime, ProjectileCooldownDuration);
+        systemStatus.UpdateMissileCooldown(elapsedMissileTime, MissileCooldownDuration);
     }
 
     public void damageBy(int amount)
@@ -235,6 +237,8 @@ public class Hero : MonoBehaviour
                 systemStatus.message.text = "You died! :'(\nPress R to reset.";
                 Destroy(gameObject);
             }
+
+            systemStatus.UpdateHealth(currentHealth, 100);
         }
     }
 
@@ -283,5 +287,7 @@ public class Hero : MonoBehaviour
         UpdatePlayerVelocity();
         UpdatePlayerPosition();
         UpdateWeapon();
+
+        systemStatus.UpdateHealth(currentHealth, 100);
     }
 }

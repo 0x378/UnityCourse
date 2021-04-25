@@ -13,7 +13,7 @@ public class Waypoint : MonoBehaviour
     private int maxHealth;
 
     public float velocity = 10f;
-    private float angleDegrees;
+    private float angleDegrees = 0;
     private float angularVelocity = 0;
     private float angularAcceleration = 0;
 
@@ -33,6 +33,7 @@ public class Waypoint : MonoBehaviour
 
         maxHealth = 40;
         currentHealth = maxHealth;
+        angleDegrees = Random.Range(-180f, 180f);
     }
 
     private void updateOpacity()
@@ -78,21 +79,33 @@ public class Waypoint : MonoBehaviour
         return new Vector3(inputRatio.x * scene.x, inputRatio.y * scene.y, transform.position.z);
     }
 
+    // Limit the input angle to plus or minus 180 degrees:
+    public static float angleWithin180(float inputAngle)
+    {
+        while (inputAngle > 180)
+        {
+            inputAngle -= 360f;
+        }
+
+        while (inputAngle < -180)
+        {
+            inputAngle += 360f;
+        }
+
+        return inputAngle;
+    }
+
     void UpdateDirection()
     {
         // Makes it more likely to slow down the current angular velocity:
         float rangeOffset = -1.5f * angularVelocity;
-
-
-        angleDegrees = transform.localEulerAngles.z;
-
         float distanceFromLeft = currentPosition.x + scene.x;  // position.x - (-scene.x)
         float distanceFromRight = scene.x - currentPosition.x;
         float distanceFromTop = scene.y - currentPosition.y;
         float distanceFromBottom = currentPosition.y + scene.y;  // position.y - (-scene.y)
 
         // Turn around near walls:
-        if (angleDegrees < 180) // Heading left
+        if (angleDegrees > 0) // Heading left
         {
             if (angleDegrees < 90) // Heading up-left
             {
@@ -119,7 +132,7 @@ public class Waypoint : MonoBehaviour
         }
         else // Heading right
         {
-            if (angleDegrees > 270) // Heading up-right
+            if (angleDegrees > -90) // Heading up-right
             {
                 if (distanceFromRight < distanceFromTop)
                 { // Turn around counter-clockwise
@@ -157,7 +170,15 @@ public class Waypoint : MonoBehaviour
             angularVelocity = -90;
         }
 
-        transform.Rotate(0, 0, angularVelocity * Time.deltaTime);
+        angleDegrees = angleWithin180(angleDegrees + angularVelocity * Time.deltaTime);
+    }
+
+    void UpdatePosition()
+    {
+        float deltaV = velocity * Time.deltaTime;
+        float angleRadians = angleDegrees * Mathf.Deg2Rad;
+        currentPosition.x -= deltaV * Mathf.Sin(angleRadians);
+        currentPosition.y += deltaV * Mathf.Cos(angleRadians);
     }
 
     // Offset the input value by plus or minus 15 units:
@@ -182,9 +203,16 @@ public class Waypoint : MonoBehaviour
             float randomX = randomOffset(initialPosition.x);
             float randomY = randomOffset(initialPosition.y);
 
+            angleDegrees = Random.Range(-180f, 180f);
             currentPosition = new Vector3(randomX, randomY, transform.position.z);
 
             currentHealth = maxHealth;
+        }
+
+        if (systemStatus.waypointMovementEnabled)
+        {
+            UpdateDirection();
+            UpdatePosition();
         }
 
         updateOpacity();

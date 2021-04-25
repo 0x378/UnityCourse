@@ -602,15 +602,15 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 602994312}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 120, y: 4, z: -1}
+  m_LocalPosition: {x: 0, y: 0, z: -1.9999989}
+  m_LocalScale: {x: 120, y: 4, z: 1}
   m_Children: []
   m_Father: {fileID: 1672840773}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 70, y: 23}
+  m_AnchoredPosition: {x: -70, y: 16}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 1, y: 0}
 --- !u!212 &602994314
@@ -1026,7 +1026,10 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'CONTROLS:  ToggleMouse[M],  ToggleDamage[O],  WaypointMovement[P],  FireMissile[F]'
+  m_Text: 'CONTROLS:  ToggleMouse[M],  HideWaypoints[H],  ToggleWaypointSequence[J]
+
+    ToggleDamage[O], 
+    WaypointMovement[P],  FireMissile[F]'
 --- !u!222 &858246745
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1697,6 +1700,9 @@ MonoBehaviour:
   waypointMovementEnabled: 0
   sequentialWaypoints: 1
   showWaypoints: 1
+  MissileCooldownBar: {fileID: 1238279177}
+  EggCooldownBar: {fileID: 602994312}
+  HeroHealthBar: {fileID: 2070613692}
 --- !u!1 &1238279177
 GameObject:
   m_ObjectHideFlags: 0
@@ -1722,15 +1728,15 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1238279177}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 120, y: 4, z: -1}
+  m_LocalPosition: {x: 0, y: 0, z: -1.9999989}
+  m_LocalScale: {x: 120, y: 4, z: 1}
   m_Children: []
   m_Father: {fileID: 1672840773}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 70, y: 16}
+  m_AnchoredPosition: {x: -70, y: 24}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 1, y: 0}
 --- !u!212 &1238279179
@@ -1817,8 +1823,8 @@ RectTransform:
   - {fileID: 858246743}
   - {fileID: 884371565}
   - {fileID: 517620362}
-  - {fileID: 602994313}
   - {fileID: 1238279178}
+  - {fileID: 602994313}
   - {fileID: 2070613693}
   m_Father: {fileID: 1111969837}
   m_RootOrder: 0
@@ -1914,15 +1920,15 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2070613692}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 120, y: 4, z: -1}
+  m_LocalPosition: {x: 0, y: 0, z: -1.9999989}
+  m_LocalScale: {x: 120, y: 4, z: 1}
   m_Children: []
   m_Father: {fileID: 1672840773}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 70, y: 9}
+  m_AnchoredPosition: {x: -70, y: 8}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 1, y: 0}
 --- !u!212 &2070613694
@@ -1966,7 +1972,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: db750325989564987a34393247d883b4, type: 3}
-  m_Color: {r: 0, g: 1, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

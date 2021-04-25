@@ -28,6 +28,14 @@ public class StatusBar : MonoBehaviour
     public bool sequentialWaypoints = true;
     public bool showWaypoints = true;
 
+    // Status bars:
+    public GameObject MissileCooldownBar;
+    public GameObject EggCooldownBar;
+    public GameObject HeroHealthBar;
+
+    private float healthBlinkTime = 0;
+    private bool healthBlinkState = false;
+
     public static Vector3 getRandomPosition()
     {
         Vector3 scene = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0f));
@@ -42,6 +50,106 @@ public class StatusBar : MonoBehaviour
     public static Quaternion getRandomDirection()
     {
         return Quaternion.Euler(0f, 0f, Random.Range(0f, 360f));
+    }
+
+    private static void UpdateBarLength(GameObject bar, float ratio)
+    {
+        float newLength = 120f * ratio;
+
+        if (newLength < 0)
+        {
+            newLength = 0;
+        }
+
+        bar.transform.localScale = new Vector3(newLength, 4f, 1f);
+    }
+
+    public void UpdateHealth(int currentHealth, int maxHealth)
+    {
+        float ratio = currentHealth / (float)maxHealth;
+        float elapsedTime = Time.time - healthBlinkTime;
+
+        if (damageEnabled)
+        {
+            UpdateBarLength(HeroHealthBar, ratio);
+        }
+        else
+        {
+            UpdateBarLength(HeroHealthBar, 0);
+        }
+
+        if (ratio < 0.21)
+        {
+            if (elapsedTime > 0.15)
+            {
+                healthBlinkState = !healthBlinkState;
+
+                if (healthBlinkState)
+                {
+                    HeroHealthBar.GetComponent<Renderer>().material.color = Color.red;
+                }
+                else
+                {
+                    HeroHealthBar.GetComponent<Renderer>().material.color = Color.yellow;
+                }
+
+                healthBlinkTime = Time.time;
+            }
+        }
+        else if (ratio < 0.41)
+        {
+            if (elapsedTime > 0.3)
+            {
+                healthBlinkState = !healthBlinkState;
+
+                if (healthBlinkState)
+                {
+                    HeroHealthBar.GetComponent<Renderer>().material.color = Color.yellow;
+                }
+                else
+                {
+                    HeroHealthBar.GetComponent<Renderer>().material.color = Color.green;
+                }
+
+                healthBlinkTime = Time.time;
+            }
+        }
+        else
+        {
+            HeroHealthBar.GetComponent<Renderer>().material.color = Color.green;
+        }
+    }
+
+    public void UpdateEggCooldown(float elapsedTime, float minimumTime)
+    {
+        float ratio = 0;
+
+        if (elapsedTime < minimumTime)
+        {
+            ratio = (minimumTime - elapsedTime) / minimumTime;
+        }
+        else
+        {
+            ratio = 0;
+        }
+
+        UpdateBarLength(EggCooldownBar, ratio);
+    }
+
+    public void UpdateMissileCooldown(float elapsedTime, float minimumTime)
+    {
+        float ratio = 0;
+
+        if (elapsedTime < minimumTime)
+        {
+            ratio = (minimumTime - elapsedTime) / minimumTime;
+        }
+        else
+        {
+            ratio = 0;
+        }
+
+        UpdateBarLength(MissileCooldownBar, ratio);
     }
 
     void Start()

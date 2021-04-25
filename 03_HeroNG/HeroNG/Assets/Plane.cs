@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Plane : MonoBehaviour
 {
-    public float velocity;
-    public string type;
+    private float velocity;
+    private string type;
 
     private float angleDegrees;
     public float angularVelocity = 0;
@@ -42,14 +42,14 @@ public class Plane : MonoBehaviour
         if (type == "Plane1")
         {
             maxHealth = 40;
-            velocity = 21f;
-            maximumAngularAcceleration = 200f;
+            velocity = 20f;
+            maximumAngularAcceleration = 190f;
         }
         else if (type == "Plane2")
         {
             maxHealth = 60;
-            velocity = 35f;
-            maximumAngularAcceleration = 300f;
+            velocity = 29f;
+            maximumAngularAcceleration = 280f;
         }
         else // "Plane3" or other:
         {
@@ -116,22 +116,6 @@ public class Plane : MonoBehaviour
         }
     }
 
-    // Limit the input angle to plus or minus 180 degrees:
-    float angleWithin180(float inputAngle)
-    {
-        while(inputAngle > 180)
-        {
-            inputAngle -= 360f;
-        }
-
-        while (inputAngle < -180)
-        {
-            inputAngle += 360f;
-        }
-
-        return inputAngle;
-    }
-
     // Rotate the plane's heading to face the current waypoint:
     void UpdateDirection()
     {
@@ -139,7 +123,7 @@ public class Plane : MonoBehaviour
 
         Vector3 waypointHeading = systemStatus.waypointPositions[waypointIndex] - position;
         float targetAngle = Mathf.Atan2(-waypointHeading.x, waypointHeading.y) * Mathf.Rad2Deg;
-        float waypointAngleDifference = angleWithin180(targetAngle - angleDegrees);
+        float waypointAngleDifference = Waypoint.angleWithin180(targetAngle - angleDegrees);
 
         float maximumAngularVelocity = Mathf.Sqrt(Mathf.Abs(maximumAngularAcceleration * waypointAngleDifference));
 
