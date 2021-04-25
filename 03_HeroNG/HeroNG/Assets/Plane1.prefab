@@ -97,15 +97,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02f37948732bd334896146cf05052f84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  angleDegrees: 0
-  distanceFromLeft: 0
-  distanceFromRight: 0
-  distanceFromTop: 0
-  distanceFromBottom: 0
+  waypointHeading: {x: 0, y: 0, z: 0}
+  targetAngle: 0
+  waypointAngleDifference: 0
   velocity: 25
   type: 
   angularVelocity: 0
   scene: {x: 0, y: 0, z: 0}
+  waypointIndex: 0
 --- !u!50 &8220973671639092074
 Rigidbody2D:
   serializedVersion: 4

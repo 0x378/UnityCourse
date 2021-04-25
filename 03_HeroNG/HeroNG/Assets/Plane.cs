@@ -4,10 +4,6 @@ using UnityEngine;
 
 public class Plane : MonoBehaviour
 {
-    public Vector3 waypointHeading;
-    public float targetAngle; // DELETEEEEE
-    public float waypointAngleDifference;
-
     public float velocity = 21f;
     public string type;
 
@@ -30,6 +26,8 @@ public class Plane : MonoBehaviour
 
     void Start()
     {
+        waypointIndex = Random.Range(0, 6);
+
         // Acquire the plane type from the object name:
         if (gameObject.name.Length > 5)
         {
@@ -117,12 +115,12 @@ public class Plane : MonoBehaviour
     {
         while(inputAngle > 180)
         {
-            inputAngle -= 360;
+            inputAngle -= 360f;
         }
 
         while (inputAngle < -180)
         {
-            inputAngle += 360;
+            inputAngle += 360f;
         }
 
         return inputAngle;
@@ -132,9 +130,10 @@ public class Plane : MonoBehaviour
     void UpdateDirection()
     {
         angleDegrees = transform.localEulerAngles.z;
-        waypointHeading = systemStatus.waypointPositions[waypointIndex] - position;
-        targetAngle = Mathf.Atan2(-waypointHeading.x, waypointHeading.y) * Mathf.Rad2Deg;
-        waypointAngleDifference = angleWithin180(targetAngle - angleDegrees);
+
+        Vector3 waypointHeading = systemStatus.waypointPositions[waypointIndex] - position;
+        float targetAngle = Mathf.Atan2(-waypointHeading.x, waypointHeading.y) * Mathf.Rad2Deg;
+        float waypointAngleDifference = angleWithin180(targetAngle - angleDegrees);
 
         float maximumAngularVelocity = Mathf.Sqrt(Mathf.Abs(maximumAngularAcceleration * waypointAngleDifference));
 
