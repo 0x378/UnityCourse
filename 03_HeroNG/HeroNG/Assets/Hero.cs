@@ -25,7 +25,7 @@ public class Hero : MonoBehaviour
 
     // Weapon handling variables:
     public float ProjectileCooldownDuration = 0.2f; // Cooldown duration for eggs
-    public float MissileCooldownDuration = 2.2f; // Cooldown duration for missiles
+    public float MissileCooldownDuration = 2.3f; // Cooldown duration for missiles
     private float previousProjectileTime;
     private float previousMissileTime;
 
@@ -76,12 +76,12 @@ public class Hero : MonoBehaviour
 
         if (Input.GetKey(KeyCode.A))
         {
-            deltaAngle += 45 * Time.deltaTime;
+            deltaAngle += 90 * Time.deltaTime;
         }
 
         if (Input.GetKey(KeyCode.D))
         {
-            deltaAngle -= 45 * Time.deltaTime;
+            deltaAngle -= 90 * Time.deltaTime;
         }
 
         transform.Rotate(0, 0, deltaAngle);

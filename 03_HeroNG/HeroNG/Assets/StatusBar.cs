@@ -111,8 +111,18 @@ public class StatusBar : MonoBehaviour
         }
 
         status.text += "],  PlaneCollisions[" + enemyCollisions;
-        status.text += "]\nENEMY:  Count[" + numberOfPlanes;
-        status.text += "],  Destroyed[" + planesDestroyed;
+        status.text += "]\nENEMY:  Destroyed[" + planesDestroyed;
+        status.text += "],  Waypoints[";
+
+        if (sequentialWaypoints)
+        {
+            status.text += "sequential";
+        }
+        else
+        {
+            status.text += "random";
+        }
+
         status.text += "],  PROJECTILES:  OnScreen[" + numberOfProjectiles + "]";
     }
 

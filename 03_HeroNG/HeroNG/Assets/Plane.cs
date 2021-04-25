@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Plane : MonoBehaviour
 {
-    public float velocity = 21f;
+    public float velocity;
     public string type;
 
     private float angleDegrees;
     public float angularVelocity = 0;
     private float angularAcceleration = 0;
-    private float maximumAngularAcceleration = 300f;
+    private float maximumAngularAcceleration;
 
     private Vector3 position;
     public Vector3 scene;
@@ -42,14 +42,20 @@ public class Plane : MonoBehaviour
         if (type == "Plane1")
         {
             maxHealth = 40;
+            velocity = 21f;
+            maximumAngularAcceleration = 200f;
         }
         else if (type == "Plane2")
         {
             maxHealth = 60;
+            velocity = 35f;
+            maximumAngularAcceleration = 300f;
         }
         else // "Plane3" or other:
         {
             maxHealth = 100;
+            velocity = 15f;
+            maximumAngularAcceleration = 40f;
         }
 
         currentHealth = maxHealth;
